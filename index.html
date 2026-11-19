@@ -1,1498 +1,452 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADT Complete Study Guide - All Questions Answered</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #2563eb; --primary-dark: #1e40af; --secondary: #10b981;
-            --dark: #1e293b; --light: #f8fafc; --border: #e2e8f0; --text: #334155;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh; padding: 20px; color: var(--text);
-        }
-        .container {
-            max-width: 1400px; margin: 0 auto; background: white;
-            border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white; padding: 40px; text-align: center;
-        }
-        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
-        .stats {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px; padding: 20px; background: var(--light);
-        }
-        .stat-card {
-            background: white; padding: 20px; border-radius: 12px; text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .stat-number { font-size: 2em; font-weight: bold; color: var(--primary); }
-        .nav { display: flex; padding: 15px 20px; background: white; border-bottom: 2px solid var(--border);
-               overflow-x: auto; gap: 10px; flex-wrap: wrap; }
-        .nav-btn {
-            padding: 10px 20px; background: var(--light); border: 2px solid var(--border);
-            border-radius: 8px; cursor: pointer; font-weight: 600; color: var(--text);
-            transition: all 0.3s;
-        }
-        .nav-btn:hover, .nav-btn.active {
-            background: var(--primary); color: white; border-color: var(--primary);
-        }
-        .search-box {
-            width: 100%; padding: 15px; font-size: 1.1em; border: 2px solid var(--border);
-            border-radius: 10px; margin: 20px 0;
-        }
-        .content { padding: 30px; }
-        .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .question-card {
-            background: white; border: 2px solid var(--border); border-radius: 12px;
-            padding: 20px; margin-bottom: 20px; transition: all 0.3s;
-        }
-        .question-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1); }
-        .q-header {
-            display: flex; align-items: center; cursor: pointer; user-select: none;
-        }
-        .q-num {
-            background: var(--primary); color: white; min-width: 40px; height: 40px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; margin-right: 15px; flex-shrink: 0;
-        }
-        .q-text { flex: 1; font-size: 1.1em; font-weight: 600; color: var(--dark); }
-        .toggle { font-size: 1.5em; color: var(--primary); transition: transform 0.3s; }
-        .collapsed .toggle { transform: rotate(-90deg); }
-        .answer {
-            padding: 20px; background: var(--light); border-radius: 8px; line-height: 1.8;
-            margin-top: 15px; max-height: 5000px; overflow: hidden; transition: max-height 0.3s ease;
-        }
-        .collapsed .answer { max-height: 0; padding: 0; margin: 0; }
-        .answer h3 { color: var(--primary); margin: 15px 0 10px 0; }
-        .answer h4 { color: var(--primary-dark); margin: 12px 0 8px 0; }
-        .code {
-            background: var(--dark); color: #a5f3fc; padding: 15px; border-radius: 8px;
-            overflow-x: auto; margin: 10px 0; font-family: 'Courier New', monospace;
-            font-size: 0.9em; line-height: 1.6; white-space: pre-wrap;
-        }
-        .highlight { background: #fef3c7; padding: 2px 6px; border-radius: 3px; font-weight: 600; }
-        .note { background: #dbeafe; border-left: 4px solid var(--primary); padding: 12px; margin: 10px 0; }
-        .success { background: #d1fae5; border-left: 4px solid var(--secondary); padding: 12px; margin: 10px 0; }
-        .warning { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin: 10px 0; }
-        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-        table th { background: var(--primary); color: white; padding: 10px; text-align: left; }
-        table td { padding: 8px; border: 1px solid var(--border); }
-        table tr:nth-child(even) { background: var(--light); }
-        .diagram { background: white; padding: 15px; border: 2px solid var(--border);
-                   border-radius: 8px; margin: 10px 0; font-family: monospace; }
-        .btn-group { display: flex; gap: 10px; margin: 15px 0; justify-content: flex-end; }
-        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;
-               font-weight: 600; transition: all 0.3s; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-secondary { background: var(--secondary); color: white; }
-        .footer { background: var(--dark); color: white; text-align: center; padding: 20px; }
-        .progress-bar { width: 100%; height: 4px; background: var(--border); position: sticky; top: 0; z-index: 1000; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary));
-                        width: 0%; transition: width 0.3s; }
-        @media (max-width: 768px) {
-            .header h1 { font-size: 1.8em; }
-            .content { padding: 15px; }
-            .q-text { font-size: 1em; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OME354 – Applied Design Thinking | Anna University Visual Learning Platform</title>
+  <meta name="description" content="A premium interactive educational platform and complete exam answer repository for Anna University OME354 Applied Design Thinking.">
+
+  <!-- Premium Typography via Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 
-    <div class="container">
-        <div class="header">
-            <h1>📚 ADT Complete Study Guide</h1>
-            <p>OME354 - All Questions Answered | Ready for Exam</p>
+  <!-- Top Sticky Header & Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="#" class="brand-badge" onclick="window.ADT_APP.switchView('home'); return false;">
+        <div class="brand-logo-icon">DT</div>
+        <div class="brand-text">
+          <span class="brand-title">Applied Design Thinking</span>
+          <span class="brand-sub">OME354 • Anna University</span>
         </div>
-
-        <div class="stats">
-            <div class="stat-card"><div class="stat-number">20</div><div>Questions</div></div>
-            <div class="stat-card"><div class="stat-number">100</div><div>Total Marks</div></div>
-            <div class="stat-card"><div class="stat-number">10</div><div>Part A (2M)</div></div>
-            <div class="stat-card"><div class="stat-number">5</div><div>Part B (13M)</div></div>
-            <div class="stat-card"><div class="stat-number">2</div><div>Part C (15M)</div></div>
-        </div>
-
-        <div class="nav">
-            <button class="nav-btn active" onclick="filterSection('all')">All Questions</button>
-            <button class="nav-btn" onclick="filterSection('partA')">Part A (2 Marks)</button>
-            <button class="nav-btn" onclick="filterSection('partB')">Part B (13 Marks)</button>
-            <button class="nav-btn" onclick="filterSection('partC')">Part C (15 Marks)</button>
-        </div>
-
-        <div class="content">
-            <input type="text" class="search-box" id="search" placeholder="🔍 Search any topic, keyword, or question..." onkeyup="searchContent()">
-
-            <div class="btn-group">
-                <button class="btn btn-secondary" onclick="expandAll()">Expand All</button>
-                <button class="btn btn-primary" onclick="collapseAll()">Collapse All</button>
-            </div>
-
-            <div id="allQuestions" class="section active">
-
-                <h2 style="color: var(--primary); margin: 30px 0 20px;">PART A - Short Answers (10 × 2 = 20 Marks)</h2>
-
-                <!-- Q1 -->
-                <div class="question-card" data-part="partA">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">1</div>
-                        <div class="q-text">Define Abstract Data Type (ADT) with any one example.</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Answer:</h3>
-                        <p><strong>Abstract Data Type (ADT)</strong> is a mathematical model that defines a data type by its <span class="highlight">behavior from the user's point of view</span>, specifically what operations can be performed on the data and what results those operations produce, <strong>without</strong> specifying how these operations are implemented.</p>
-
-                        <h4>Key Characteristics:</h4>
-                        <ul>
-                            <li><strong>Data Abstraction:</strong> Hides internal implementation details</li>
-                            <li><strong>Encapsulation:</strong> Bundles data with operations that manipulate it</li>
-                            <li><strong>Information Hiding:</strong> Only the interface is visible, implementation is hidden</li>
-                        </ul>
-
-                        <h4>Example: Stack ADT</h4>
-                        <p>Stack is an ADT that follows <strong>LIFO (Last-In-First-Out)</strong> principle.</p>
-
-                        <div class="note">
-                            <strong>Operations:</strong>
-                            <ul>
-                                <li><code>push(element)</code> - Insert element at top</li>
-                                <li><code>pop()</code> - Remove and return top element</li>
-                                <li><code>peek()</code> - View top element without removing</li>
-                                <li><code>isEmpty()</code> - Check if stack is empty</li>
-                                <li><code>isFull()</code> - Check if stack is full</li>
-                            </ul>
-                        </div>
-
-                        <div class="diagram">Stack Example:
-    Push(10) → [10]
-    Push(20) → [20][10]
-    Push(30) → [30][20][10] ← Top
-    Pop() → Returns 30, Stack: [20][10]</div>
-
-                        <p>The user doesn't need to know whether the stack is implemented using arrays, linked lists, or any other structure. They only use the defined operations.</p>
-
-                        <div class="success">
-                            <strong>Real-world analogy:</strong> Stack of plates - you can only add or remove from the top!
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Q2 -->
-                <div class="question-card" data-part="partA">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">2</div>
-                        <div class="q-text">What is a circular linked list? Mention its advantage over singly linked list.</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Answer:</h3>
-                        <p><strong>Circular Linked List</strong> is a variation of linked list where the last node points back to the first node instead of NULL, forming a circular structure.</p>
-
-                        <div class="diagram">Singly Linked List:
-[10] → [20] → [30] → [40] → NULL
-
-Circular Linked List:
-[10] → [20] → [30] → [40] ──┐
- ↑                            │
- └────────────────────────────┘</div>
-
-                        <h4>Advantages over Singly Linked List:</h4>
-                        <table>
-                            <tr><th>Feature</th><th>Singly Linked</th><th>Circular Linked</th></tr>
-                            <tr><td>Reaching first from last</td><td>O(n) - traverse entire list</td><td>O(1) - direct access via last→next</td></tr>
-                            <tr><td>Continuous traversal</td><td>Not possible (ends at NULL)</td><td>Possible (loops infinitely)</td></tr>
-                            <tr><td>Insert at end</td><td>O(n) without tail pointer</td><td>O(1) with tail pointer</td></tr>
-                            <tr><td>Insert at beginning</td><td>O(1)</td><td>O(1) even simpler</td></tr>
-                        </table>
-
-                        <div class="success">
-                            <strong>Key Advantages:</strong>
-                            <ul>
-                                <li>No NULL pointers - every node has a valid next</li>
-                                <li>Can traverse entire list starting from any node</li>
-                                <li>Perfect for round-robin scheduling (CPU scheduling, multiplayer games)</li>
-                                <li>Easy implementation of circular queues</li>
-                            </ul>
-                        </div>
-
-                        <div class="note">
-                            <strong>Applications:</strong> Round-robin CPU scheduling, multiplayer game turns, music playlist repeat mode, token ring networks
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Q3 -->
-                <div class="question-card" data-part="partA">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">3</div>
-                        <div class="q-text">Write the postfix expression for: A + B * C - D / E</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Answer:</h3>
-                        <p><strong>Infix:</strong> <code>A + B * C - D / E</code></p>
-                        <p><strong>Postfix:</strong> <code><span class="highlight">A B C * + D E / -</span></code></p>
-
-                        <h4>Step-by-Step Conversion:</h4>
-                        <div class="note">
-                            <strong>Operator Precedence:</strong> * / (higher) > + - (lower)<br>
-                            <strong>Associativity:</strong> Left to right for same precedence
-                        </div>
-
-                        <table>
-                            <tr><th>Step</th><th>Symbol</th><th>Stack</th><th>Postfix</th></tr>
-                            <tr><td>1</td><td>A</td><td></td><td>A</td></tr>
-                            <tr><td>2</td><td>+</td><td>+</td><td>A</td></tr>
-                            <tr><td>3</td><td>B</td><td>+</td><td>A B</td></tr>
-                            <tr><td>4</td><td>*</td><td>+ *</td><td>A B</td></tr>
-                            <tr><td>5</td><td>C</td><td>+ *</td><td>A B C</td></tr>
-                            <tr><td>6</td><td>-</td><td>-</td><td>A B C * +</td></tr>
-                            <tr><td>7</td><td>D</td><td>-</td><td>A B C * + D</td></tr>
-                            <tr><td>8</td><td>/</td><td>- /</td><td>A B C * + D</td></tr>
-                            <tr><td>9</td><td>E</td><td>- /</td><td>A B C * + D E</td></tr>
-                            <tr><td>10</td><td>End</td><td></td><td><strong>A B C * + D E / -</strong></td></tr>
-                        </table>
-
-                        <h4>Evaluation Example:</h4>
-                        <p>Let A=5, B=3, C=2, D=8, E=4</p>
-                        <div class="code">Expression: A B C * + D E / -
-          : 5 3 2 * + 8 4 / -
-
-Step 1: 3 * 2 = 6     → 5 6 + 8 4 / -
-Step 2: 5 + 6 = 11    → 11 8 4 / -
-Step 3: 8 / 4 = 2     → 11 2 -
-Step 4: 11 - 2 = 9
-
-Final Answer: 9</div>
-
-                        <div class="success">
-                            <strong>Remember:</strong> In postfix, operators come AFTER operands. No parentheses needed!
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Continue with remaining Part A questions (Q4-Q10) -->
-                <!-- Q4 -->
-                <div class="question-card" data-part="partA">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">4</div>
-                        <div class="q-text">Define: (i) Full Binary Tree (ii) Complete Binary Tree</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>(i) Full Binary Tree:</h3>
-                        <p>A tree where every node has either <span class="highlight">0 or 2 children</span>. No node has exactly one child.</p>
-                        <div class="diagram">Full Binary Tree:
-       1
-      / \
-     2   3
-    / \ / \
-   4  5 6  7
-All nodes: 0 or 2 children ✓</div>
-
-                        <h3>(ii) Complete Binary Tree:</h3>
-                        <p>A tree where all levels are completely filled except possibly the last, which is filled from left to right.</p>
-                        <div class="diagram">Complete Binary Tree:
-       1
-      / \
-     2   3
-    / \ /
-   4  5 6
-Last level filled left→right ✓</div>
-
-                        <table>
-                            <tr><th>Feature</th><th>Full</th><th>Complete</th></tr>
-                            <tr><td>Node children</td><td>0 or 2 only</td><td>0, 1, or 2</td></tr>
-                            <tr><td>Level filling</td><td>No rule</td><td>Must fill left to right</td></tr>
-                            <tr><td>Use</td><td>Expression trees</td><td>Heap, Priority Queue</td></tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Q5 -->
-                <div class="question-card" data-part="partA">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">5</div>
-                        <div class="q-text">What is an AVL tree? What is the condition for a tree to be an AVL tree?</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Answer:</h3>
-                        <p><strong>AVL Tree</strong> (Adelson-Velsky and Landis) is a <span class="highlight">self-balancing binary search tree</span> where the height difference between left and right subtrees is at most 1 for every node.</p>
-
-                        <h4>Condition for AVL Tree:</h4>
-                        <div class="note">
-                            <strong>Balance Factor (BF) = Height(Left Subtree) - Height(Right Subtree)</strong><br>
-                            <strong>AVL Condition:</strong> <span class="highlight">|BF| ≤ 1</span> for EVERY node<br>
-                            Valid BF values: <strong>-1, 0, +1</strong>
-                        </div>
-
-                        <div class="diagram">AVL Tree (Valid):
-      50 (BF=0)
-     /  \
-  30(0) 70(BF=-1)
-  / \      \
-20  40    80(0)
-All |BF| ≤ 1 ✓
-
-NOT AVL (Invalid):
-    50 (BF=-2)
-      \
-      70 (BF=-1)
-        \
-        80
-Node 50: |BF|=2 ✗</div>
-
-                        <h4>Rotation Types:</h4>
-                        <table>
-                            <tr><th>Case</th><th>Rotation</th></tr>
-                            <tr><td>BF=+2, Left child BF=+1</td><td>LL Rotation (Right rotate)</td></tr>
-                            <tr><td>BF=-2, Right child BF=-1</td><td>RR Rotation (Left rotate)</td></tr>
-                            <tr><td>BF=+2, Left child BF=-1</td><td>LR Rotation (Left-Right)</td></tr>
-                            <tr><td>BF=-2, Right child BF=+1</td><td>RL Rotation (Right-Left)</td></tr>
-                        </table>
-
-                        <div class="success">
-                            <strong>Advantages:</strong> Guaranteed O(log n) for search, insert, delete. No worst-case O(n) like regular BST!
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Q6-Q10 Similar format... -->
-                <!-- Due to space, showing compact versions -->
-
-                <div class="question-card" data-part="partA">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">6</div>
-                        <div class="q-text">Differentiate between stack and queue.</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Answer:</h3>
-                        <table>
-                            <tr><th>Feature</th><th>Stack</th><th>Queue</th></tr>
-                            <tr><td>Principle</td><td>LIFO (Last In First Out)</td><td>FIFO (First In First Out)</td></tr>
-                            <tr><td>Insertion</td><td>push() at TOP</td><td>enqueue() at REAR</td></tr>
-                            <tr><td>Deletion</td><td>pop() from TOP</td><td>dequeue() from FRONT</td></tr>
-                            <tr><td>Pointers</td><td>One (top)</td><td>Two (front, rear)</td></tr>
-                            <tr><td>Analogy</td><td>Stack of plates</td><td>Queue at ticket counter</td></tr>
-                            <tr><td>Applications</td><td>Function calls, Undo, Expression evaluation</td><td>CPU scheduling, BFS, Printer queue</td></tr>
-                        </table>
-                        <div class="diagram">STACK: [30][20][10] ← Add/Remove from TOP
-QUEUE: [10][20][30] → Remove from FRONT, Add at REAR</div>
-                    </div>
-                </div>
-
-                <div class="question-card" data-part="partA">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">7</div>
-                        <div class="q-text">What is the time complexity of inserting at beginning of linked list? Justify.</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Answer:</h3>
-                        <p><strong>Time Complexity: <span class="highlight">O(1) - Constant Time</span></strong></p>
-
-                        <h4>Justification:</h4>
-                        <p>Only 3 fixed operations needed regardless of list size:</p>
-                        <div class="code">1. Create new node          // O(1)
-2. newNode→next = head     // O(1)
-3. head = newNode          // O(1)
-Total: O(1)</div>
-
-                        <div class="note">
-                            <strong>Why O(1)?</strong>
-                            <ul>
-                                <li>No traversal needed</li>
-                                <li>Direct head access</li>
-                                <li>Same for 10 or 10,000 nodes</li>
-                            </ul>
-                        </div>
-
-                        <table>
-                            <tr><th>Operation</th><th>Time</th></tr>
-                            <tr><td>Insert at beginning</td><td>O(1)</td></tr>
-                            <tr><td>Insert at end</td><td>O(n)</td></tr>
-                            <tr><td>Delete from beginning</td><td>O(1)</td></tr>
-                            <tr><td>Search</td><td>O(n)</td></tr>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="question-card" data-part="partA">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">8</div>
-                        <div class="q-text">Define height and depth of a binary tree.</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Height:</h3>
-                        <p>Number of edges from a node to the deepest leaf (calculated bottom-up).</p>
-                        <ul>
-                            <li>Height of leaf node = 0</li>
-                            <li>Height of tree = Height of root</li>
-                        </ul>
-
-                        <h3>Depth:</h3>
-                        <p>Number of edges from root to that node (calculated top-down).</p>
-                        <ul>
-                            <li>Depth of root = 0</li>
-                            <li>Also called "Level"</li>
-                        </ul>
-
-                        <div class="diagram">        1 (D=0, H=3)
-       / \
-      2   3 (D=1, H=2)
-     / \
-    4   5 (D=2, H=1)
-   /
-  8 (D=3, H=0)</div>
-
-                        <table>
-                            <tr><th>Aspect</th><th>Height</th><th>Depth</th></tr>
-                            <tr><td>Direction</td><td>Bottom-up</td><td>Top-down</td></tr>
-                            <tr><td>Root node</td><td>Max height</td><td>0</td></tr>
-                            <tr><td>Leaf node</td><td>0</td><td>Varies</td></tr>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="question-card" data-part="partA">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">9</div>
-                        <div class="q-text">What is a priority queue? Give one real-time application.</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Answer:</h3>
-                        <p><strong>Priority Queue</strong> is an ADT where each element has a priority, and elements are served based on priority (not insertion order).</p>
-
-                        <h4>Types:</h4>
-                        <ul>
-                            <li><strong>Max Priority Queue:</strong> Highest priority served first</li>
-                            <li><strong>Min Priority Queue:</strong> Lowest priority served first</li>
-                        </ul>
-
-                        <h4>Operations:</h4>
-                        <table>
-                            <tr><th>Operation</th><th>Time (Heap)</th></tr>
-                            <tr><td>insert(element, priority)</td><td>O(log n)</td></tr>
-                            <tr><td>extractMax/Min()</td><td>O(log n)</td></tr>
-                            <tr><td>peek()</td><td>O(1)</td></tr>
-                        </table>
-
-                        <div class="success">
-                            <strong>Real Application: Hospital Emergency Room</strong>
-                            <ul>
-                                <li>Patients arrive with different severity levels</li>
-                                <li>Critical patients (Priority 10) treated before minor injuries (Priority 2)</li>
-                                <li>Not first-come-first-served, but priority-based</li>
-                                <li>Saves lives by treating urgent cases immediately</li>
-                            </ul>
-                        </div>
-
-                        <div class="note">
-                            <strong>Other Applications:</strong> CPU scheduling, Dijkstra's algorithm, Huffman coding, load balancing
-                        </div>
-                    </div>
-                </div>
-
-                <div class="question-card" data-part="partA">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">10</div>
-                        <div class="q-text">Write algorithm to check if stack is empty (array implementation).</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Algorithm:</h3>
-                        <div class="code">Algorithm isEmpty(stack)
-BEGIN
-    IF top == -1 THEN
-        RETURN TRUE
-    ELSE
-        RETURN FALSE
-    END IF
-END</div>
-
-                        <h4>C Implementation:</h4>
-                        <div class="code">int isEmpty(struct Stack* stack) {
-    return (stack→top == -1);
-}</div>
-
-                        <h4>Explanation:</h4>
-                        <ul>
-                            <li>Initially: top = -1 (empty)</li>
-                            <li>After first push: top = 0</li>
-                            <li>If top == -1: No elements</li>
-                        </ul>
-
-                        <div class="diagram">Empty Stack:
-arr: [ ][ ][ ][ ]
-top = -1 ← isEmpty() = TRUE
-
-After push(10):
-arr: [10][ ][ ][ ]
-      ↑
-    top=0 ← isEmpty() = FALSE</div>
-
-                        <table>
-                            <tr><th>Function</th><th>Condition</th><th>Used Before</th></tr>
-                            <tr><td>isEmpty()</td><td>top == -1</td><td>pop(), peek()</td></tr>
-                            <tr><td>isFull()</td><td>top == MAX-1</td><td>push()</td></tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- PART B QUESTIONS -->
-                <h2 style="color: var(--primary); margin: 50px 0 30px;">PART B - Long Answers (5 × 13 = 65 Marks)</h2>
-
-                <!-- Q11(a) - Singly Linked List -->
-                <div class="question-card" data-part="partB">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">11(a)</div>
-                        <div class="q-text">C program: Singly linked list with insert at beginning, insert at end, delete element, display</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Complete C Program:</h3>
-                        <div class="code">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-
-struct Node {
-    int data;
-    struct Node* next;
-};
-
-struct Node* head = NULL;
-
-// Create new node
-struct Node* createNode(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode→data = data;
-    newNode→next = NULL;
-    return newNode;
-}
-
-// Insert at beginning - O(1)
-void insertAtBeginning(int data) {
-    struct Node* newNode = createNode(data);
-    newNode→next = head;
-    head = newNode;
-    printf("Inserted %d at beginning\n", data);
-}
-
-// Insert at end - O(n)
-void insertAtEnd(int data) {
-    struct Node* newNode = createNode(data);
-    if (head == NULL) {
-        head = newNode;
-        return;
-    }
-    struct Node* temp = head;
-    while (temp→next != NULL)
-        temp = temp→next;
-    temp→next = newNode;
-    printf("Inserted %d at end\n", data);
-}
-
-// Delete element - O(n)
-void deleteElement(int key) {
-    if (head == NULL) {
-        printf("List empty!\n");
-        return;
-    }
-    struct Node *temp = head, *prev = NULL;
-
-    // If head contains key
-    if (temp != NULL && temp→data == key) {
-        head = temp→next;
-        free(temp);
-        printf("Deleted %d\n", key);
-        return;
-    }
-
-    // Search for key
-    while (temp != NULL && temp→data != key) {
-        prev = temp;
-        temp = temp→next;
-    }
-
-    if (temp == NULL) {
-        printf("%d not found\n", key);
-        return;
-    }
-
-    prev→next = temp→next;
-    free(temp);
-    printf("Deleted %d\n", key);
-}
-
-// Display - O(n)
-void display() {
-    if (head == NULL) {
-        printf("List is empty\n");
-        return;
-    }
-    struct Node* temp = head;
-    printf("List: ");
-    while (temp != NULL) {
-        printf("%d → ", temp→data);
-        temp = temp→next;
-    }
-    printf("NULL\n");
-}
-
-int main() {
-    insertAtBeginning(10);
-    insertAtEnd(20);
-    insertAtEnd(30);
-    insertAtBeginning(5);
-    display();          // 5 → 10 → 20 → 30 → NULL
-    deleteElement(20);
-    display();          // 5 → 10 → 30 → NULL
-    return 0;
-}</div>
-
-                        <div class="success">
-                            <strong>Output:</strong>
-                            <pre>Inserted 10 at beginning
-Inserted 20 at end
-Inserted 30 at end
-Inserted 5 at beginning
-List: 5 → 10 → 20 → 30 → NULL
-Deleted 20
-List: 5 → 10 → 30 → NULL</pre>
-                        </div>
-
-                        <table>
-                            <tr><th>Operation</th><th>Time</th><th>Marking (13 marks)</th></tr>
-                            <tr><td>Structure definition</td><td>-</td><td>2 marks</td></tr>
-                            <tr><td>Insert at beginning</td><td>O(1)</td><td>2.5 marks</td></tr>
-                            <tr><td>Insert at end</td><td>O(n)</td><td>2.5 marks</td></tr>
-                            <tr><td>Delete</td><td>O(n)</td><td>3 marks</td></tr>
-                            <tr><td>Display</td><td>O(n)</td><td>2 marks</td></tr>
-                            <tr><td>Main/Menu</td><td>-</td><td>1 mark</td></tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Q12(a) - Infix to Postfix -->
-                <div class="question-card" data-part="partB">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">12(a)</div>
-                        <div class="q-text">Convert infix to postfix and evaluate postfix expression using stack</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Complete C Program:</h3>
-                        <div class="code">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;string.h&gt;
-#include &lt;ctype.h&gt;
-
-#define MAX 100
-
-// Stack for operators
-char stack[MAX];
-int top = -1;
-
-void push(char c) { stack[++top] = c; }
-char pop() { return stack[top--]; }
-char peek() { return stack[top]; }
-int isEmpty() { return top == -1; }
-
-// Precedence function
-int precedence(char op) {
-    if (op == '+' || op == '-') return 1;
-    if (op == '*' || op == '/') return 2;
-    return 0;
-}
-
-// Convert infix to postfix
-void infixToPostfix(char* infix, char* postfix) {
-    int i = 0, j = 0;
-
-    while (infix[i] != '\0') {
-        // If operand, add to postfix
-        if (isalnum(infix[i])) {
-            postfix[j++] = infix[i];
-        }
-        // If '(', push to stack
-        else if (infix[i] == '(') {
-            push(infix[i]);
-        }
-        // If ')', pop until '('
-        else if (infix[i] == ')') {
-            while (!isEmpty() && peek() != '(') {
-                postfix[j++] = pop();
-            }
-            pop(); // Remove '('
-        }
-        // Operator
-        else {
-            while (!isEmpty() && precedence(peek()) >= precedence(infix[i])) {
-                postfix[j++] = pop();
-            }
-            push(infix[i]);
-        }
-        i++;
-    }
-
-    // Pop remaining operators
-    while (!isEmpty()) {
-        postfix[j++] = pop();
-    }
-    postfix[j] = '\0';
-}
-
-// Stack for evaluation
-int evalStack[MAX];
-int evalTop = -1;
-
-void pushEval(int val) { evalStack[++evalTop] = val; }
-int popEval() { return evalStack[evalTop--]; }
-
-// Evaluate postfix
-int evaluatePostfix(char* postfix) {
-    int i = 0;
-
-    while (postfix[i] != '\0') {
-        if (isdigit(postfix[i])) {
-            pushEval(postfix[i] - '0');
-        }
-        else {
-            int val2 = popEval();
-            int val1 = popEval();
-
-            switch(postfix[i]) {
-                case '+': pushEval(val1 + val2); break;
-                case '-': pushEval(val1 - val2); break;
-                case '*': pushEval(val1 * val2); break;
-                case '/': pushEval(val1 / val2); break;
-            }
-        }
-        i++;
-    }
-    return popEval();
-}
-
-int main() {
-    char infix[] = "(5+3)*2-8/4";
-    char postfix[MAX];
-
-    printf("Infix: %s\n", infix);
-    infixToPostfix(infix, postfix);
-    printf("Postfix: %s\n", postfix);
-
-    int result = evaluatePostfix(postfix);
-    printf("Result: %d\n", result);
-
-    return 0;
-}</div>
-
-                        <h4>Example Trace:</h4>
-                        <div class="diagram">Infix: (A+B)*C-D/E  →  Postfix: AB+C*DE/-
-
-Evaluation (A=5,B=3,C=2,D=8,E=4):
-Step 1: 5 3 + = 8     Stack: [8]
-Step 2: 8 2 * = 16    Stack: [16]
-Step 3: 8 4 / = 2     Stack: [16, 2]
-Step 4: 16 2 - = 14   Final: 14</div>
-
-                        <div class="success">
-                            <strong>Marking (13 marks):</strong>
-                            <ul>
-                                <li>Algorithm explanation: 3 marks</li>
-                                <li>Precedence handling: 2 marks</li>
-                                <li>Conversion code: 4 marks</li>
-                                <li>Evaluation code: 3 marks</li>
-                                <li>Example trace: 1 mark</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Q13(b) - AVL Tree Construction -->
-                <div class="question-card" data-part="partB">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">13(b)</div>
-                        <div class="q-text">Construct AVL tree: 50,25,75,10,30,60,80,5,15 - Show all rotations</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Step-by-Step AVL Tree Construction:</h3>
-
-                        <div class="diagram"><strong>Insert 50:</strong>
-    50 (BF=0)
-No rotation needed
-
-<strong>Insert 25:</strong>
-    50 (BF=+1)
-   /
-  25 (BF=0)
-No rotation needed
-
-<strong>Insert 75:</strong>
-    50 (BF=0)
-   /  \
-  25  75
-No rotation needed
-
-<strong>Insert 10:</strong>
-      50 (BF=+1)
-     /  \
-    25  75
-   /
-  10
-No rotation needed
-
-<strong>Insert 30:</strong>
-      50 (BF=+1)
-     /  \
-    25  75 (BF=0)
-   / \
-  10 30
-No rotation needed (balanced)
-
-<strong>Insert 60:</strong>
-      50
-     /  \
-    25  75
-   / \  /
-  10 30 60
-No rotation needed
-
-<strong>Insert 80:</strong>
-      50
-     /  \
-    25  75
-   / \  / \
-  10 30 60 80
-No rotation needed
-
-<strong>Insert 5:</strong>
-        50
-       /  \
-      25  75
-     / \  / \
-    10 30 60 80
-   /
-  5
-
-Node 10 becomes unbalanced (BF=+1)
-Node 25 becomes unbalanced (BF=+2)
-
-<strong>LL ROTATION at node 25:</strong>
-      50
-     /  \
-    10  75
-   / \  / \
-  5  25 60 80
-     /
-    15(next)
-
-After rotation, tree is balanced!
-
-<strong>Insert 15:</strong>
-        50
-       /  \
-      10  75
-     / \  / \
-    5  25 60 80
-       /
-      15
-
-Node 25 has BF=-1
-Node 10 has BF=+1
-Tree is balanced!
-
-<strong>FINAL AVL TREE:</strong>
-        50
-       /  \
-      10  75
-     / \  / \
-    5  25 60 80
-       /
-      15</div>
-
-                        <h4>Rotation Types Explained:</h4>
-                        <div class="note">
-                            <strong>LL Rotation (Right Rotation):</strong>
-                            <pre>     Y                X
-    / \              / \
-   X   C    →       A   Y
-  / \                  / \
- A   B                B   C</pre>
-                        </div>
-
-                        <div class="note">
-                            <strong>RR Rotation (Left Rotation):</strong>
-                            <pre>   X                  Y
-  / \                / \
- A   Y      →       X   C
-    / \            / \
-   B   C          A   B</pre>
-                        </div>
-
-                        <div class="success">
-                            <strong>Marking (13 marks):</strong>
-                            <ul>
-                                <li>Tree construction diagrams: 8 marks (1 per key insertion)</li>
-                                <li>Rotation type explanations: 3 marks</li>
-                                <li>Final tree correctness: 2 marks</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Q14(b) - Stack Applications -->
-                <div class="question-card" data-part="partB">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">14(b)</div>
-                        <div class="q-text">Stack applications: Palindrome check, String reversal, Balanced parentheses</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Complete C Program - Three Stack Applications:</h3>
-                        <div class="code">#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#include &lt;ctype.h&gt;
-#define MAX 100
-
-char stack[MAX];
-int top = -1;
-
-void push(char c) { stack[++top] = c; }
-char pop() { return stack[top--]; }
-int isEmpty() { return top == -1; }
-
-// 1. Check Palindrome
-int isPalindrome(char str[]) {
-    int len = strlen(str);
-    int i;
-
-    // Push first half
-    for (i = 0; i < len/2; i++)
-        push(tolower(str[i]));
-
-    // Skip middle if odd length
-    if (len % 2 != 0) i++;
-
-    // Compare second half with stack
-    while (i < len) {
-        if (tolower(str[i]) != pop())
-            return 0;
-        i++;
-    }
-    return 1;
-}
-
-// 2. Reverse String
-void reverseString(char str[]) {
-    top = -1; // Reset stack
-    int i;
-
-    // Push all characters
-    for (i = 0; str[i] != '\0'; i++)
-        push(str[i]);
-
-    // Pop and overwrite
-    for (i = 0; !isEmpty(); i++)
-        str[i] = pop();
-
-    str[i] = '\0';
-}
-
-// 3. Check Balanced Parentheses
-int isBalanced(char expr[]) {
-    top = -1;
-    int i;
-
-    for (i = 0; expr[i] != '\0'; i++) {
-        // Push opening brackets
-        if (expr[i] == '(' || expr[i] == '[' || expr[i] == '{') {
-            push(expr[i]);
-        }
-        // Check closing brackets
-        else if (expr[i] == ')' || expr[i] == ']' || expr[i] == '}') {
-            if (isEmpty())
-                return 0;
-
-            char top = pop();
-            if ((expr[i] == ')' && top != '(') ||
-                (expr[i] == ']' && top != '[') ||
-                (expr[i] == '}' && top != '{'))
-                return 0;
-        }
-    }
-    return isEmpty();
-}
-
-int main() {
-    // Test 1: Palindrome
-    char str1[] = "MADAM";
-    printf("'%s' is %s\n", str1,
-           isPalindrome(str1) ? "palindrome" : "not palindrome");
-
-    // Test 2: Reverse
-    char str2[] = "HELLO";
-    printf("Original: %s\n", str2);
-    reverseString(str2);
-    printf("Reversed: %s\n", str2);
-
-    // Test 3: Balanced parentheses
-    char expr1[] = "{[()]}";
-    char expr2[] = "{[(])}";
-    printf("'%s' is %s\n", expr1,
-           isBalanced(expr1) ? "balanced" : "not balanced");
-    printf("'%s' is %s\n", expr2,
-           isBalanced(expr2) ? "balanced" : "not balanced");
-
-    return 0;
-}</div>
-
-                        <div class="success">
-                            <strong>Sample Output:</strong>
-                            <pre>'MADAM' is palindrome
-Original: HELLO
-Reversed: OLLEH
-'{[()]}' is balanced
-'{[(])}' is not balanced</pre>
-                        </div>
-
-                        <table>
-                            <tr><th>Application</th><th>Time</th><th>Marks</th></tr>
-                            <tr><td>Stack implementation</td><td>O(1)</td><td>2 marks</td></tr>
-                            <tr><td>Palindrome check</td><td>O(n)</td><td>3.5 marks</td></tr>
-                            <tr><td>String reversal</td><td>O(n)</td><td>3.5 marks</td></tr>
-                            <tr><td>Balanced parentheses</td><td>O(n)</td><td>3.5 marks</td></tr>
-                            <tr><td>Examples with output</td><td>-</td><td>0.5 marks</td></tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Q15(a) - Circular Queue -->
-                <div class="question-card" data-part="partB">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">15(a)</div>
-                        <div class="q-text">Circular queue using arrays: Enqueue, Dequeue, Display, isEmpty, isFull</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Complete C Program:</h3>
-                        <div class="code">#include &lt;stdio.h&gt;
-#define SIZE 5
-
-int queue[SIZE];
-int front = -1, rear = -1;
-
-// Check if full
-int isFull() {
-    return ((rear + 1) % SIZE == front);
-}
-
-// Check if empty
-int isEmpty() {
-    return (front == -1);
-}
-
-// Enqueue
-void enqueue(int data) {
-    if (isFull()) {
-        printf("Queue is Full!\n");
-        return;
-    }
-
-    if (front == -1) // First element
-        front = 0;
-
-    rear = (rear + 1) % SIZE;
-    queue[rear] = data;
-    printf("Inserted %d\n", data);
-}
-
-// Dequeue
-int dequeue() {
-    if (isEmpty()) {
-        printf("Queue is Empty!\n");
-        return -1;
-    }
-
-    int data = queue[front];
-
-    if (front == rear) { // Last element
-        front = rear = -1;
-    } else {
-        front = (front + 1) % SIZE;
-    }
-
-    printf("Deleted %d\n", data);
-    return data;
-}
-
-// Display
-void display() {
-    if (isEmpty()) {
-        printf("Queue is Empty!\n");
-        return;
-    }
-
-    printf("Queue: ");
-    int i = front;
-    while (1) {
-        printf("%d ", queue[i]);
-        if (i == rear) break;
-        i = (i + 1) % SIZE;
-    }
-    printf("\n");
-}
-
-int main() {
-    enqueue(10);
-    enqueue(20);
-    enqueue(30);
-    enqueue(40);
-    display();      // 10 20 30 40
-
-    dequeue();      // Remove 10
-    dequeue();      // Remove 20
-    display();      // 30 40
-
-    enqueue(50);    // Wraps around
-    enqueue(60);    // Wraps around
-    display();      // 30 40 50 60
-
-    return 0;
-}</div>
-
-                        <h4>How Circular Queue Works:</h4>
-                        <div class="diagram">Initial: front=-1, rear=-1
-[ ][ ][ ][ ][ ]
-
-After enqueue(10,20,30):
-front=0          rear=2
-[10][20][30][ ][ ]
-
-After dequeue() twice:
-    front=2      rear=2
-[ ][ ][30][ ][ ]
-
-After enqueue(40,50,60):
-    front=2
-[50][60][30][40][ ]
-         ↑      ↑
-       front  rear
-Wraps around! No space wasted!</div>
-
-                        <div class="success">
-                            <strong>Advantages over Linear Queue:</strong>
-                            <ul>
-                                <li>No space wastage - reuses freed positions</li>
-                                <li>Efficient memory utilization</li>
-                                <li>Continuous operation without reset</li>
-                            </ul>
-                        </div>
-
-                        <h4>Formulas:</h4>
-                        <div class="code">isEmpty: front == -1
-isFull: (rear + 1) % SIZE == front
-Enqueue: rear = (rear + 1) % SIZE
-Dequeue: front = (front + 1) % SIZE</div>
-
-                        <table>
-                            <tr><th>Component</th><th>Marks</th></tr>
-                            <tr><td>Structure & initialization</td><td>2</td></tr>
-                            <tr><td>Enqueue with wrap-around</td><td>3</td></tr>
-                            <tr><td>Dequeue with wrap-around</td><td>3</td></tr>
-                            <tr><td>isEmpty/isFull</td><td>2</td></tr>
-                            <tr><td>Display</td><td>2</td></tr>
-                            <tr><td>Advantages explanation</td><td>1</td></tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- PART C QUESTIONS -->
-                <h2 style="color: var(--primary); margin: 50px 0 30px;">PART C - Application Problems (1 × 15 = 15 Marks)</h2>
-
-                <!-- Q16(a) - Task Management System -->
-                <div class="question-card" data-part="partC">
-                    <div class="q-header" onclick="toggleQ(this)">
-                        <div class="q-num">16(a)</div>
-                        <div class="q-text">Design task management system with priority queue: addTask, removeHighestPriority, viewPending, countTasks</div>
-                        <div class="toggle">▼</div>
-                    </div>
-                    <div class="answer">
-                        <h3>Complete Implementation:</h3>
-
-                        <h4>1. ADT Specification (3 marks):</h4>
-                        <div class="note">
-                            <strong>Data Structure:</strong>
-                            <ul>
-                                <li>Task Name (string)</li>
-                                <li>Priority (integer: 1=Low, 2=Medium, 3=High)</li>
-                                <li>Next pointer</li>
-                            </ul>
-                            <strong>Operations:</strong>
-                            <ul>
-                                <li>addTask(name, priority) - Insert maintaining priority order</li>
-                                <li>removeHighestPriority() - Delete from front (highest priority)</li>
-                                <li>viewPendingTasks() - Display all tasks</li>
-                                <li>countTasks() - Return total count</li>
-                            </ul>
-                        </div>
-
-                        <h4>2. Justification (2 marks):</h4>
-                        <div class="success">
-                            I chose <strong>priority-based sorted linked list</strong> because:
-                            <ul>
-                                <li>Insertion maintains priority order: O(n)</li>
-                                <li>Removal of highest priority: O(1) from front</li>
-                                <li>No fixed size limitation (dynamic)</li>
-                                <li>Easy to implement under exam conditions</li>
-                            </ul>
-                        </div>
-
-                        <h4>3. Complete C Implementation (8 marks):</h4>
-                        <div class="code">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;string.h&gt;
-
-struct Task {
-    char name[50];
-    int priority;  // 3=High, 2=Medium, 1=Low
-    struct Task* next;
-};
-
-struct Task* head = NULL;
-
-// Add task (sorted by priority)
-void addTask(char name[], int priority) {
-    struct Task* newTask = (struct Task*)malloc(sizeof(struct Task));
-    strcpy(newTask→name, name);
-    newTask→priority = priority;
-    newTask→next = NULL;
-
-    // Insert at beginning if higher priority
-    if (head == NULL || head→priority < priority) {
-        newTask→next = head;
-        head = newTask;
-        printf("Added: %s (Priority: %d)\n", name, priority);
-        return;
-    }
-
-    // Find correct position
-    struct Task* temp = head;
-    while (temp→next != NULL && temp→next→priority >= priority) {
-        temp = temp→next;
-    }
-
-    newTask→next = temp→next;
-    temp→next = newTask;
-    printf("Added: %s (Priority: %d)\n", name, priority);
-}
-
-// Remove highest priority task
-void removeHighestPriority() {
-    if (head == NULL) {
-        printf("No tasks to remove!\n");
-        return;
-    }
-
-    struct Task* temp = head;
-    printf("Removed: %s (Priority: %d)\n", temp→name, temp→priority);
-    head = head→next;
-    free(temp);
-}
-
-// View all pending tasks
-void viewPendingTasks() {
-    if (head == NULL) {
-        printf("No pending tasks.\n");
-        return;
-    }
-
-    printf("\n=== PENDING TASKS ===\n");
-    printf("%-30s Priority\n", "Task Name");
-    printf("----------------------------------------\n");
-
-    struct Task* temp = head;
-    int count = 1;
-    while (temp != NULL) {
-        char* prio = (temp→priority == 3) ? "High" :
-                     (temp→priority == 2) ? "Medium" : "Low";
-        printf("%d. %-27s %s (%d)\n", count++, temp→name, prio, temp→priority);
-        temp = temp→next;
-    }
-    printf("========================================\n");
-}
-
-// Count tasks
-int countTasks() {
-    int count = 0;
-    struct Task* temp = head;
-    while (temp != NULL) {
-        count++;
-        temp = temp→next;
-    }
-    return count;
-}
-
-int main() {
-    printf("=== TASK MANAGEMENT SYSTEM ===\n\n");
-
-    // Add tasks
-    addTask("Fix Bug #123", 3);           // High
-    addTask("Code Review", 2);            // Medium
-    addTask("Update Documentation", 1);   // Low
-    addTask("Security Patch", 3);         // High
-    addTask("Write Unit Tests", 2);       // Medium
-
-    viewPendingTasks();
-
-    printf("\nTotal tasks: %d\n", countTasks());
-
-    printf("\n--- Removing highest priority ---\n");
-    removeHighestPriority();
-
-    viewPendingTasks();
-    printf("\nTotal tasks: %d\n", countTasks());
-
-    return 0;
-}</div>
-
-                        <h4>4. Sample Run (2 marks):</h4>
-                        <div class="success">
-                            <strong>Output:</strong>
-                            <pre>=== TASK MANAGEMENT SYSTEM ===
-
-Added: Fix Bug #123 (Priority: 3)
-Added: Code Review (Priority: 2)
-Added: Update Documentation (Priority: 1)
-Added: Security Patch (Priority: 3)
-Added: Write Unit Tests (Priority: 2)
-
-=== PENDING TASKS ===
-Task Name                      Priority
-----------------------------------------
-1. Fix Bug #123               High (3)
-2. Security Patch             High (3)
-3. Code Review                Medium (2)
-4. Write Unit Tests           Medium (2)
-5. Update Documentation       Low (1)
-========================================
-
-Total tasks: 5
-
---- Removing highest priority ---
-Removed: Fix Bug #123 (Priority: 3)
-
-=== PENDING TASKS ===
-Task Name                      Priority
-----------------------------------------
-1. Security Patch             High (3)
-2. Code Review                Medium (2)
-3. Write Unit Tests           Medium (2)
-4. Update Documentation       Low (1)
-========================================
-
-Total tasks: 4</pre>
-                        </div>
-
-                        <h4>Complexity Analysis:</h4>
-                        <table>
-                            <tr><th>Operation</th><th>Time</th><th>Reason</th></tr>
-                            <tr><td>addTask()</td><td>O(n)</td><td>Must find correct position</td></tr>
-                            <tr><td>removeHighestPriority()</td><td>O(1)</td><td>Delete from front</td></tr>
-                            <tr><td>viewPendingTasks()</td><td>O(n)</td><td>Traverse all tasks</td></tr>
-                            <tr><td>countTasks()</td><td>O(n)</td><td>Traverse all tasks</td></tr>
-                        </table>
-
-                        <div class="warning">
-                            <strong>Edge Cases Handled:</strong>
-                            <ul>
-                                <li>Empty list (no tasks)</li>
-                                <li>Multiple tasks with same priority (FIFO within same priority)</li>
-                                <li>Memory deallocation on remove</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>📚 ADT Complete Study Guide | OME354</p>
-            <p>Sathyabama Institute of Science and Technology</p>
-            <p>💡 Study Smart • Score High • All the Best! 🎯</p>
-        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="nav-menu">
+        <a href="#home" class="nav-link active" data-view="home">Overview</a>
+        <a href="#units" class="nav-link" data-view="unit-explorer">Unit Explorer</a>
+        <a href="#visual" class="nav-link" data-view="visual-studio">Visual Studio</a>
+        <a href="#exam" class="nav-link" data-view="exam-centre">Exam Centre</a>
+        <a href="#quiz" class="nav-link" data-view="quiz-centre">Quiz Centre</a>
+        <a href="#revision" class="nav-link" data-view="revision-centre">Revision</a>
+      </nav>
+
+      <!-- Header Action Controls -->
+      <div class="header-actions">
+        <button class="search-trigger-btn" id="search-trigger-btn" title="Search all topics (Ctrl+K)">
+          <span>🔍 Search topics...</span>
+          <kbd>Ctrl K</kbd>
+        </button>
+
+        <button class="icon-btn" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
+          🌙
+        </button>
+      </div>
     </div>
+  </header>
 
-    <script>
-        function toggleQ(el) {
-            el.parentElement.classList.toggle('collapsed');
-        }
+  <!-- Main View Container -->
+  <main class="main-content">
 
-        function expandAll() {
-            document.querySelectorAll('.question-card').forEach(card => {
-                card.classList.remove('collapsed');
-            });
-        }
+    <!-- ====================================================================
+         VIEW 1: HOME & HERO EXPERIENCE (MODERN EDITORIAL)
+         ==================================================================== -->
+    <section id="view-home" class="view-section active-view">
+      <div class="container">
+        
+        <!-- Hero Section -->
+        <div class="hero-editorial">
+          <div class="hero-content">
+            <span class="hero-tag">✨ Complete Curriculum & Exam Mastery</span>
+            <h1>Solving Human Problems Through <span>Empathy & Iteration</span></h1>
+            <p class="hero-lead">
+              Welcome to the official, complete study platform for <strong>Anna University OME354 – Applied Design Thinking</strong>. Designed to bridge deep human-centered empathy with rigorous university exam preparation across Part A (2 Marks), Part B (13 Marks), and Part C (15 Marks) comprehensive design cases.
+            </p>
+            <div class="hero-actions">
+              <button class="btn-primary" onclick="window.ADT_APP.switchView('unit-explorer')">
+                Start Learning Now →
+              </button>
+              <button class="btn-secondary" onclick="window.ADT_APP.switchView('exam-centre')">
+                View Exam Q&A Repository
+              </button>
+            </div>
+          </div>
 
-        function collapseAll() {
-            document.querySelectorAll('.question-card').forEach(card => {
-                card.classList.add('collapsed');
-            });
-        }
+          <!-- Hero Visual Feature: Interactive 5-Stage Diagram Teaser -->
+          <div class="hero-visual-card">
+            <div class="hero-card-header">
+              <span class="hero-card-title">The 5-Stage Design Thinking Framework</span>
+              <span class="interactive-pill">Interactive</span>
+            </div>
+            <div class="hero-stage-stack">
+              <div class="stage-step-row" onclick="window.ADT_APP.openQuestion('Q11(a)')">
+                <span class="stage-num-badge">1</span>
+                <span class="stage-step-title">Empathize</span>
+                <span class="stage-step-action">Observe & Immerse →</span>
+              </div>
+              <div class="stage-step-row" onclick="window.ADT_APP.openQuestion('Q12(a)')">
+                <span class="stage-num-badge">2</span>
+                <span class="stage-step-title">Define</span>
+                <span class="stage-step-action">POV & Insights →</span>
+              </div>
+              <div class="stage-step-row" onclick="window.ADT_APP.openQuestion('Q13(a)')">
+                <span class="stage-num-badge">3</span>
+                <span class="stage-step-title">Ideate</span>
+                <span class="stage-step-action">SCAMPER & Diverge →</span>
+              </div>
+              <div class="stage-step-row" onclick="window.ADT_APP.openQuestion('Q14(a)')">
+                <span class="stage-num-badge">4</span>
+                <span class="stage-step-title">Prototype</span>
+                <span class="stage-step-action">Low-Fi to High-Fi →</span>
+              </div>
+              <div class="stage-step-row" onclick="window.ADT_APP.openQuestion('Q14(b)')">
+                <span class="stage-num-badge">5</span>
+                <span class="stage-step-title">Test</span>
+                <span class="stage-step-action">Observe & Iterate →</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        function filterSection(section) {
-            const btns = document.querySelectorAll('.nav-btn');
-            btns.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        <!-- Curriculum Statistics Ribbon -->
+        <div class="curriculum-ribbon">
+          <div class="ribbon-stat-item">
+            <span class="stat-value">5+1</span>
+            <span class="stat-label">Syllabus Modules</span>
+            <span class="stat-desc">5 Units + Capstone Case Studies</span>
+          </div>
+          <div class="ribbon-stat-item">
+            <span class="stat-value">22</span>
+            <span class="stat-label">Verified Exam Answers</span>
+            <span class="stat-desc">10 Part A + 10 Part B + 2 Part C</span>
+          </div>
+          <div class="ribbon-stat-item">
+            <span class="stat-value">100%</span>
+            <span class="stat-label">Original Content Preserved</span>
+            <span class="stat-desc">Zero paraphrase or missing lines</span>
+          </div>
+          <div class="ribbon-stat-item">
+            <span class="stat-value">20</span>
+            <span class="stat-label">Interactive Quizzes</span>
+            <span class="stat-desc">Self-assessment & score tracking</span>
+          </div>
+        </div>
 
-            const cards = document.querySelectorAll('.question-card');
-            cards.forEach(card => {
-                if (section === 'all' || card.getAttribute('data-part') === section) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
+        <!-- Units Explorer Showcase Grid -->
+        <div class="section-header-block">
+          <span class="section-label">Curriculum Architecture</span>
+          <h2 class="section-title">Explore Units & Syllabi</h2>
+          <p class="section-subtitle">
+            Every unit is curated directly from the authoritative OME354 study material, complete with key definitions, analytical diagrams, and step-by-step methodologies.
+          </p>
+        </div>
 
-        function searchContent() {
-            const query = document.getElementById('search').value.toLowerCase();
-            const cards = document.querySelectorAll('.question-card');
+        <div class="units-grid" id="units-grid">
+          <!-- Dynamic Units Injected via JS -->
+        </div>
 
-            cards.forEach(card => {
-                const text = card.textContent.toLowerCase();
-                if (text.includes(query)) {
-                    card.style.display = 'block';
-                    if (query.length > 2) card.classList.remove('collapsed');
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
+      </div>
+    </section>
 
-        window.addEventListener('scroll', () => {
-            const h = document.documentElement.scrollHeight - window.innerHeight;
-            const p = (window.pageYOffset / h) * 100;
-            document.getElementById('progressFill').style.width = p + '%';
-        });
+    <!-- ====================================================================
+         VIEW 2: UNIT EXPLORER & LESSON READER
+         ==================================================================== -->
+    <section id="view-unit-explorer" class="view-section">
+      <div class="container">
+        <div class="unit-explorer-layout">
+          
+          <!-- Sticky Sidebar Navigation -->
+          <aside class="unit-sidebar-nav">
+            <h3 class="sidebar-title">Course Navigator</h3>
+            <select class="sidebar-unit-select" id="sidebar-unit-select">
+              <option value="1">Unit I: Foundations & Empathy</option>
+              <option value="2">Unit II: Research, Personas & Define</option>
+              <option value="3">Unit III: Ideation & Reframing</option>
+              <option value="4">Unit IV: Prototyping & Testing</option>
+              <option value="5">Unit V: Business & Innovation</option>
+              <option value="6">Part C: Capstone Design Cases</option>
+            </select>
+            <ul class="sidebar-topic-list" id="sidebar-topic-list">
+              <!-- Dynamically populated topics list -->
+            </ul>
+          </aside>
 
-        // Collapse all on load
-        window.onload = () => collapseAll();
-    </script>
+          <!-- Reading & Study Pane -->
+          <main class="reading-pane" id="reading-pane-content">
+            <!-- Dynamically populated answer content -->
+          </main>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 3: VISUAL LEARNING STUDIO & INTERACTIVE DIAGRAMS
+         ==================================================================== -->
+    <section id="view-visual-studio" class="view-section">
+      <div class="container">
+        
+        <div class="section-header-block">
+          <span class="section-label">Interactive Museum of Design Concepts</span>
+          <h2 class="section-title">Visual Learning Studio</h2>
+          <p class="section-subtitle">
+            Experience the core mental models and frameworks of Design Thinking through interactive visual demonstrations grounded in your academic syllabus.
+          </p>
+        </div>
+
+        <div class="studio-grid">
+          
+          <!-- Diagram Card 1: 5-Stage Non-Linear Process -->
+          <div class="interactive-diagram-card">
+            <div class="diagram-header">
+              <span class="diagram-badge">Process Flow</span>
+              <h3 class="diagram-title">The 5-Stage Iterative Framework</h3>
+              <p style="font-size:0.85rem; color:var(--text-muted);">Click any stage to inspect its objective and key actions.</p>
+            </div>
+            <div class="diagram-canvas">
+              <div class="dt-process-bar">
+                <div class="dt-stage-node active" onclick="window.ADT_APP.selectProcessStage(0)">
+                  <div class="dt-stage-circle">1</div>
+                  <div class="dt-stage-label">Empathize</div>
+                </div>
+                <div class="dt-stage-node" onclick="window.ADT_APP.selectProcessStage(1)">
+                  <div class="dt-stage-circle">2</div>
+                  <div class="dt-stage-label">Define</div>
+                </div>
+                <div class="dt-stage-node" onclick="window.ADT_APP.selectProcessStage(2)">
+                  <div class="dt-stage-circle">3</div>
+                  <div class="dt-stage-label">Ideate</div>
+                </div>
+                <div class="dt-stage-node" onclick="window.ADT_APP.selectProcessStage(3)">
+                  <div class="dt-stage-circle">4</div>
+                  <div class="dt-stage-label">Prototype</div>
+                </div>
+                <div class="dt-stage-node" onclick="window.ADT_APP.selectProcessStage(4)">
+                  <div class="dt-stage-circle">5</div>
+                  <div class="dt-stage-label">Test</div>
+                </div>
+              </div>
+            </div>
+            <div class="diagram-inspector" id="process-stage-inspector">
+              1. EMPATHIZE: Immerse in the user's world. Observe behaviors, conduct deep qualitative interviews, and shadow daily routines to reveal emotional barriers and latent unstated needs.
+            </div>
+          </div>
+
+          <!-- Diagram Card 2: Empathy Map 4-Quadrant Matrix -->
+          <div class="interactive-diagram-card">
+            <div class="diagram-header">
+              <span class="diagram-badge">Synthesis Model</span>
+              <h3 class="diagram-title">Empathy Map 4-Quadrant Matrix</h3>
+              <p style="font-size:0.85rem; color:var(--text-muted);">Click any quadrant to view real examples from user research.</p>
+            </div>
+            <div class="diagram-canvas">
+              <div class="empathy-map-matrix">
+                <div class="empathy-quadrant active" data-quadrant="says" onclick="window.ADT_APP.selectEmpathyQuadrant('says')">
+                  <div class="quadrant-title">🗣️ SAYS</div>
+                  <div class="quadrant-desc">Direct verbatim quotes spoken by the user.</div>
+                </div>
+                <div class="empathy-quadrant" data-quadrant="thinks" onclick="window.ADT_APP.selectEmpathyQuadrant('thinks')">
+                  <div class="quadrant-title">🧠 THINKS</div>
+                  <div class="quadrant-desc">Inner beliefs, concerns, and unexpressed thoughts.</div>
+                </div>
+                <div class="empathy-quadrant" data-quadrant="does" onclick="window.ADT_APP.selectEmpathyQuadrant('does')">
+                  <div class="quadrant-title">🏃 DOES</div>
+                  <div class="quadrant-desc">Observable physical actions and behaviors.</div>
+                </div>
+                <div class="empathy-quadrant" data-quadrant="feels" onclick="window.ADT_APP.selectEmpathyQuadrant('feels')">
+                  <div class="quadrant-title">❤️ FEELS</div>
+                  <div class="quadrant-desc">Emotional states, fears, anxieties, and joy.</div>
+                </div>
+              </div>
+            </div>
+            <div class="diagram-inspector" id="empathy-matrix-inspector">
+              <strong>SAYS QUADRANT:</strong> Direct verbatim quotes spoken by users during field interviews (e.g. 'I get overwhelmed trying to manage five different prescriptions every day.').
+            </div>
+          </div>
+
+          <!-- Diagram Card 3: Divergent vs Convergent Thinking -->
+          <div class="interactive-diagram-card">
+            <div class="diagram-header">
+              <span class="diagram-badge">Cognitive Model</span>
+              <h3 class="diagram-title">The Double Diamond of Thinking</h3>
+              <p style="font-size:0.85rem; color:var(--text-muted);">Click to toggle between Divergent Exploration and Convergent Selection.</p>
+            </div>
+            <div class="diagram-canvas">
+              <div class="diamond-stage-visual">
+                <div class="diamond-shape active" data-phase="divergent" onclick="window.ADT_APP.selectDiamondPhase('divergent')">
+                  <div class="diamond-title">◇ Divergent</div>
+                  <div class="diamond-subtitle">Create Choices (Breadth)</div>
+                </div>
+                <div class="diamond-shape" data-phase="convergent" onclick="window.ADT_APP.selectDiamondPhase('convergent')">
+                  <div class="diamond-title">◈ Convergent</div>
+                  <div class="diamond-subtitle">Make Choices (Focus)</div>
+                </div>
+              </div>
+            </div>
+            <div class="diagram-inspector" id="diamond-inspector">
+              <strong>DIVERGENT THINKING (Explore Breadth):</strong> Generating a large volume of possibilities without criticism. Exploring wide solutions, wild concepts, and multiple perspectives. Quantity drives quality.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 4: EXAM PREPARATION CENTRE
+         ==================================================================== -->
+    <section id="view-exam-centre" class="view-section">
+      <div class="container">
+        
+        <div class="section-header-block">
+          <span class="section-label">Anna University Exam Preparation</span>
+          <h2 class="section-title">Official Examination Repository</h2>
+          <p class="section-subtitle">
+            All 22 questions and answers structured in Anna University's exact format. Complete with Part A (2-Mark conceptual foundations), Part B (13-Mark analytical essays), and Part C (15-Mark application cases).
+          </p>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="exam-filter-bar">
+          <div class="exam-pills">
+            <button class="filter-pill exam-filter-pill active" data-filter="all">All Questions (22)</button>
+            <button class="filter-pill exam-filter-pill" data-filter="partA">Part A • 2 Marks (10)</button>
+            <button class="filter-pill exam-filter-pill" data-filter="partB">Part B • 13 Marks (10)</button>
+            <button class="filter-pill exam-filter-pill" data-filter="partC">Part C • 15 Marks (2)</button>
+            <button class="filter-pill exam-filter-pill" data-filter="bookmarked">Bookmarked</button>
+          </div>
+          <div style="font-size:0.88rem; color:var(--text-muted);">
+            Tip: Switch between <strong>Understanding Mode</strong> and <strong>Exam Writing Mode</strong> inside any question!
+          </div>
+        </div>
+
+        <!-- Questions List Container -->
+        <div class="exam-questions-list" id="exam-questions-list">
+          <!-- Dynamically populated via JS -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 5: INTERACTIVE QUIZ CENTRE
+         ==================================================================== -->
+    <section id="view-quiz-centre" class="view-section">
+      <div class="container">
+        
+        <div class="section-header-block" style="text-align:center;">
+          <span class="section-label">Self-Assessment Engine</span>
+          <h2 class="section-title">Knowledge Validation Quizzes</h2>
+          <p class="section-subtitle" style="margin:0 auto;">
+            Test your comprehension of core Design Thinking concepts with instant feedback, scoring, and source-grounded explanations.
+          </p>
+        </div>
+
+        <div class="quiz-container">
+          <div class="quiz-card">
+            <div class="quiz-progress-bar-wrap">
+              <div class="quiz-progress-fill" id="quiz-progress-fill" style="width: 5%;"></div>
+            </div>
+            
+            <div id="quiz-question-container">
+              <!-- Dynamically populated quiz question -->
+            </div>
+
+            <div class="quiz-nav-row" style="margin-top:2rem; display:flex; justify-content:space-between;">
+              <button class="btn-secondary" id="quiz-prev-btn" disabled>← Previous</button>
+              <button class="btn-primary" id="quiz-next-btn">Next Question →</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 6: REVISION & QUICK REFERENCE
+         ==================================================================== -->
+    <section id="view-revision-centre" class="view-section">
+      <div class="container">
+        
+        <div class="section-header-block">
+          <span class="section-label">Rapid Exam Flashcards & Summaries</span>
+          <h2 class="section-title">Quick Revision Reference</h2>
+          <p class="section-subtitle">
+            High-yield definitions, comparison matrices, process frameworks, and real-world case studies for the night before your university examination.
+          </p>
+        </div>
+
+        <div class="revision-masonry" id="revision-masonry-grid">
+          <!-- Dynamically populated revision items -->
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Search Modal Overlay -->
+  <div class="modal-overlay" id="search-modal">
+    <div class="search-modal-box">
+      <div class="search-input-header">
+        <span style="font-size:1.2rem;">🔍</span>
+        <input type="text" class="search-input-field" id="search-input" placeholder="Search topics, questions, definitions (e.g. SCAMPER, Empathy Map)...">
+        <button class="icon-btn" id="close-search-btn" style="border:none;">✕</button>
+      </div>
+      <div class="search-results-list" id="search-results">
+        <!-- Search results injected here -->
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Quick Answer Popover / Modal Overlay -->
+  <div class="modal-overlay" id="answer-modal">
+    <div class="answer-modal-box">
+      <div class="answer-modal-header">
+        <div>
+          <div id="answer-modal-badge" style="font-family:var(--font-mono); font-size:0.8rem; font-weight:700; color:var(--brand-primary); margin-bottom:0.25rem;"></div>
+          <h2 id="answer-modal-title" style="font-size:1.4rem; margin:0;"></h2>
+        </div>
+        <button class="icon-btn" onclick="window.ADT_APP.closeAnswerModal()" style="border:none;">✕</button>
+      </div>
+      <div class="answer-modal-body" id="answer-modal-body">
+        <!-- Answer content loaded here -->
+      </div>
+      <div class="answer-modal-footer">
+        <button class="btn-secondary" onclick="window.ADT_APP.closeAnswerModal()">Close</button>
+        <button class="btn-primary" id="answer-modal-full-btn">Open in Unit Explorer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="brand-text">
+        <span class="brand-title" style="font-size:1.25rem;">OME354 – Applied Design Thinking</span>
+        <span class="brand-sub">Anna University Regulation Curriculum Repository</span>
+      </div>
+      <p class="footer-text">
+        Crafted with pure HTML5, modern CSS, and vanilla ES6 JavaScript. All academic answers and terminology are strictly sourced from the official course documentation.
+      </p>
+      <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.5rem;">
+        Press <kbd style="background:var(--bg-tertiary); padding:2px 6px; border-radius:4px;">Ctrl+K</kbd> to search anytime • Works 100% offline via localStorage
+      </div>
+    </div>
+  </footer>
+
+  <!-- Course Data & Scripts (Traditional HTML loading order) -->
+  <script src="data/courseData.js"></script>
+  <script src="data/quizData.js"></script>
+  <script src="data/revisionData.js"></script>
+  <script src="js/app.js"></script>
+
 </body>
 </html>
